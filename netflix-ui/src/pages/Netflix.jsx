@@ -16,21 +16,23 @@ const Netflix = () => {
   const navigate = useNavigate();
   const genresLoaded = useSelector((state)=>state.netflix.genresLoaded);
   const dispatch = useDispatch();
-  const movies =  useSelector((state)=>state.netflix.movies)
-
+  const movies =  useSelector((state)=>state.netflix.movies);
+  const genres = useSelector((state) => state.netflix.genres);
+  const [isScrolled, setIsScrolled] = useState(false);
   useEffect(()=>{
     dispatch(getGenres())
-
   },[])
 
   useEffect(()=>{
-    if(genresLoaded) dispatch(fetchMovies({type:"all"}));
-  })
+    if(genresLoaded) {
+      dispatch(fetchMovies({genres, type:"all"}));
+    }
+  },[genresLoaded]);
 
 
-  const [isScrolled, setIsScrolled] = useState(false)
+  
     window.onscroll = () => {
-      setIsScrolled(window.pageYOffset==0?false : true);
+      setIsScrolled(window.pageYOffset == 0 ? false : true);
       return () => (window.onscroll = null);
     };
 
