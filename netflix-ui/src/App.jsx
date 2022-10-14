@@ -6,6 +6,7 @@ import Netflix from './pages/Netflix';
 import Player from './pages/Player';
 import Movies from './pages/Movies';
 import Series from './pages/Series';
+import UserLiked from "./pages/UserLiked"
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route exact path="/player" element={<Player/>} />
           <Route exact path="/movies" element={<Movies/>} />
           <Route exact path="/tv" element={<Series/>} />
+          <Route exact path="/mylist" element={<UserLiked/>} />
           <Route exact path="/" element={<Netflix/>} />
         </Routes>
       </BrowserRouter>

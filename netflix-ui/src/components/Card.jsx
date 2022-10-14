@@ -1,16 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components'
-import video from "../assets/video.mp4"
-import {IoPlayCircleSharp} from "react-icons/io5"
-import {RiThumbUpFill, RiThumbDownFill} from "react-icons/ri"
-import {BsCheck} from "react-icons/bs"
-import {AiOutlinePlus} from "react-icons/ai"
-import {BiChevronDown} from "react-icons/bi"
+import styled from 'styled-components';
+import video from "../assets/video.mp4";
+import {IoPlayCircleSharp} from "react-icons/io5";
+import {RiThumbUpFill, RiThumbDownFill} from "react-icons/ri";
+import {BsCheck} from "react-icons/bs";
+import {AiOutlinePlus} from "react-icons/ai";
+import {BiChevronDown} from "react-icons/bi";
+import { onAuthStateChanged } from "firebase/auth";
+import { firebaseAuth } from "../utils/firebase-config";
+import axios from "axios";
+/* import env from "react-dotenv";  */
+
+
 
 const Card = ({movieData, isLiked= false}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [email,setEmail] = useState(undefined);
     const navigate = useNavigate();
+    
+    onAuthStateChanged(firebaseAuth ,(currentUser)=>{
+      if(currentUser) setEmail(currentUser.email);
+      else navigate("/login")
+    })
+    
+    const addToList = async () => {
+      
+      try {
+        await axios.post("mongodb+srv://cifu1199:2LzkVBnq9XcXUWQL@cluster0.mcwccx4.mongodb.net/api/user/add",
+          { email,
+            data:movieData})
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
   return (
     <Container  
         onMouseEnter={()=> setIsHovered(true)} 
@@ -46,7 +70,7 @@ const Card = ({movieData, isLiked= false}) => {
                                     }
                                 />
                                 ) : (
-                                <AiOutlinePlus title="Agregar a Mi lista"  />
+                                <AiOutlinePlus title="Agregar a Mi lista" onClick={addToList} />
                             )}
                         </div>
                         <div className="info">
